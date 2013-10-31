@@ -4,7 +4,9 @@ call bat\SetupSDK.bat
 call bat\SetupApplication.bat
 
 :target
-goto desktop
+set /p RUNTO=Run on Device? (y/n) 
+if %RUNTO% == y goto android-debug ELSE goto desktop
+::goto desktop
 ::goto android-debug
 ::goto android-test
 set INTERPRETER=-interpreter
@@ -23,7 +25,7 @@ echo Starting AIR Debug Launcher with screen size '%SCREEN_SIZE%'
 echo.
 echo (hint: edit 'Run.bat' to test on device or change screen size)
 echo.
-adl -screensize %SCREEN_SIZE% "%APP_XML%" "%APP_DIR%"
+adl -screensize %SCREEN_SIZE% "%APP_XML%" "%APP_DIR%" -extdir extension/debug/
 if errorlevel 1 goto end
 goto end
 
@@ -103,4 +105,6 @@ echo.
 echo Installing the app on the device failed
 
 :end
+ping localhost > nul
+exit
 pause
